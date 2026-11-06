@@ -1,0 +1,243 @@
+:root {
+  --bg: #eef0f3;
+  --panel: #ffffff;
+  --text: #1d2330;
+  --muted: #6b7380;
+  --border: #d6dae1;
+  --accent: #2f5fd0;
+  --accent-text: #ffffff;
+  --error: #c62828;
+  --warn: #a15c00;
+  --ok: #2e7d32;
+  --hover: #f1f4fa;
+  --page-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  --editor-bg: #fbfbfc;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1e24;
+    --panel: #23272f;
+    --text: #e4e7ec;
+    --muted: #9aa2ae;
+    --border: #383e49;
+    --accent: #5b86ef;
+    --hover: #2c313b;
+    --page-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+    --editor-bg: #1f232a;
+    --error: #ff6b6b;
+    --warn: #ffb74d;
+    --ok: #81c784;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.4 "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+button, select, input {
+  font: inherit;
+  color: inherit;
+}
+
+button, select {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  min-height: 28px;
+}
+
+button:hover:not(:disabled), select:hover { background: var(--hover); }
+button:disabled { opacity: 0.45; cursor: default; }
+button.accent { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+button.accent:hover:not(:disabled) { filter: brightness(1.08); background: var(--accent); }
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding: 6px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand { font-size: 15px; letter-spacing: 0.2px; margin-right: 4px; }
+.brand b { color: var(--accent); }
+
+.group { display: flex; align-items: center; gap: 6px; }
+.group.right { margin-left: auto; }
+.group label { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+.group input[type=range] { width: 80px; accent-color: var(--accent); }
+#zoom-label { min-width: 64px; cursor: pointer; text-align: center; font-variant-numeric: tabular-nums; }
+
+.workspace {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.editor-pane {
+  width: 40%;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+}
+
+.pane-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.pane-title .muted { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.editor-wrap {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  background: var(--editor-bg);
+}
+
+.gutter, #editor {
+  font: 14px/1.6 Consolas, "Cascadia Mono", "DejaVu Sans Mono", monospace;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.gutter {
+  width: 44px;
+  text-align: right;
+  padding-right: 8px;
+  color: var(--muted);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  user-select: none;
+}
+.gutter .err { color: var(--error); font-weight: 700; }
+
+#editor {
+  flex: 1;
+  border: 0;
+  outline: none;
+  resize: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  background: transparent;
+  color: var(--text);
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+}
+
+.splitter {
+  width: 5px;
+  cursor: col-resize;
+  background: var(--border);
+}
+.splitter:hover, .splitter.drag { background: var(--accent); }
+
+.preview-pane {
+  flex: 1;
+  overflow: auto;
+  min-width: 0;
+}
+
+.pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  width: max-content;
+  min-width: 100%;
+}
+
+.pages svg.pm-page {
+  display: block;
+  box-shadow: var(--page-shadow);
+  background: #fff;
+}
+
+.pages .ev { cursor: pointer; }
+.pages .ev:hover text, .pages .ev:hover circle { fill: #2f5fd0; }
+.pages .ev.playing text, .pages .ev.playing circle, .pages .ev.playing line { fill: #d32f2f; }
+.pages .ev.playing line { stroke: #d32f2f; }
+
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 12px;
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  min-height: 26px;
+}
+.status { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status.error { color: var(--error); cursor: pointer; }
+.status.warn { color: var(--warn); }
+.status.ok { color: var(--ok); }
+.muted { color: var(--muted); }
+
+.help {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px;
+  overflow: auto;
+  z-index: 10;
+}
+.help[hidden] { display: none; }
+.help-card {
+  position: relative;
+  background: var(--panel);
+  border-radius: 10px;
+  max-width: 720px;
+  width: 100%;
+  padding: 20px 26px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+.help-card h2 { margin-top: 0; }
+.help-card h3 { margin: 18px 0 6px; }
+.help-card table { border-collapse: collapse; width: 100%; }
+.help-card td { border-top: 1px solid var(--border); padding: 5px 8px; vertical-align: top; }
+.help-card td:first-child { white-space: nowrap; width: 1%; }
+.help-card code { background: var(--hover); padding: 1px 5px; border-radius: 4px; font-family: Consolas, monospace; }
+.help-card .close { position: absolute; top: 10px; right: 12px; font-size: 18px; line-height: 1; padding: 4px 10px; }
+
+@media (max-width: 760px) {
+  .workspace { flex-direction: column; }
+  .editor-pane { width: 100% !important; height: 40%; min-width: 0; }
+  .splitter { display: none; }
+}
+
+/* ---------- Cetak / PDF: hanya halaman partitur ---------- */
+@media print {
+  html, body { background: #fff; height: auto; overflow: visible; display: block; }
+  .toolbar, .editor-pane, .splitter, .statusbar, .help { display: none !important; }
+  .workspace, .preview-pane { display: block; overflow: visible; }
+  .pages { display: block; padding: 0; gap: 0; zoom: 1 !important; width: auto; }
+  .pages svg.pm-page { box-shadow: none; break-after: page; page-break-after: always; }
+  .pages svg.pm-page:last-child { break-after: auto; page-break-after: auto; }
+  .pages .ev.playing text, .pages .ev.playing circle { fill: #000; }
+}

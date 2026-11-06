@@ -1,0 +1,72 @@
+{
+  "name": "partiturmaker",
+  "productName": "PartiturMaker",
+  "version": "1.0.0",
+  "description": "Pembuat partitur not angka untuk buku nyanyian jemaat (gaya KJ, PKJ, NKB)",
+  "main": "main.js",
+  "author": "Stephen Prasetya Chrismawan",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test \"test/**/*.test.js\"",
+    "dist": "electron-builder --win",
+    "dist:dir": "electron-builder --win --dir"
+  },
+  "devDependencies": {
+    "electron": "^44.10.2",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "id.partiturmaker.app",
+    "productName": "PartiturMaker",
+    "copyright": "PartiturMaker",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "build/icon.png"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "fileAssociations": [
+      {
+        "ext": "ptm",
+        "name": "Partitur PartiturMaker",
+        "description": "Partitur not angka PartiturMaker",
+        "role": "Editor"
+      }
+    ],
+    "win": {
+      "icon": "build/icon.png",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "${productName}-${version}-${arch}-${target}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PartiturMaker",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}
