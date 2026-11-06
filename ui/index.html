@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PartiturMaker: tulis not angka langsung di halaman partitur, gaya Kidung Jemaat, PKJ dan NKB.">
+  <title>PartiturMaker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="doc-name">
+      <span id="file-name">Lagu baru</span>
+      <span id="save-state" class="quiet">Belum disimpan</span>
+    </div>
+
+    <div class="seg" role="radiogroup" aria-label="Tampilan">
+      <button role="radio" aria-checked="true" data-mode="buku">Halaman buku</button>
+      <button role="radio" aria-checked="false" data-mode="tayang">Tayangan per bait</button>
+    </div>
+
+    <div class="bar-actions">
+      <button id="btn-play" class="btn" title="Putar atau hentikan (Spasi)">
+        <svg aria-hidden="true" viewBox="0 0 16 16" class="ico play"><path d="M4 2.5v11l9-5.5z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 16 16" class="ico stop"><rect x="3.5" y="3.5" width="9" height="9" rx="1"/></svg>
+        <span class="lbl">Putar</span>
+      </button>
+      <button id="btn-code" class="btn" aria-pressed="false" title="Tampilkan kode Nada">Kode</button>
+      <button id="btn-open" class="btn" title="Buka berkas (Ctrl+O)">Buka</button>
+      <div class="menu-wrap">
+        <button id="btn-export" class="btn" aria-haspopup="menu" aria-expanded="false">Ekspor</button>
+        <div id="export-menu" class="menu" role="menu" hidden>
+          <button role="menuitem" data-export="pdf">PDF untuk dicetak</button>
+          <button role="menuitem" data-export="png">Gambar PNG</button>
+          <button role="menuitem" data-export="svg">Gambar SVG</button>
+          <button role="menuitem" data-export="print">Cetak langsung</button>
+        </div>
+      </div>
+      <button id="btn-save" class="btn primary" title="Simpan (Ctrl+S)">Simpan</button>
+    </div>
+  </header>
+
+  <div class="work">
+    <aside class="side" aria-label="Keterangan lagu">
+      <section class="side-sec">
+        <h2>Tentang lagu</h2>
+        <div class="field-row">
+          <label class="field narrow">Nomor<input data-meta="nomor" placeholder="KJ 1"></label>
+          <label class="field">Nada dasar
+            <select data-meta="nada">
+              <option value="">Belum dipilih</option>
+              <option>C</option><option>Cis</option><option>Des</option><option>D</option><option>Es</option>
+              <option>E</option><option>F</option><option>Fis</option><option>G</option><option>As</option>
+              <option>A</option><option>Bes</option><option>B</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">Judul<input data-meta="judul" placeholder="Judul lagu"></label>
+        <label class="field">Ayat atau keterangan<input data-meta="ayat" placeholder="Mazmur 100"></label>
+        <div class="field-row">
+          <label class="field">Ketuk
+            <select data-meta="ketuk">
+              <option value="">Belum dipilih</option>
+              <option value="2">2 ketuk</option><option value="3">3 ketuk</option><option value="4">4 ketuk</option>
+              <option value="6/8">6/8</option><option value="3/2">3/2</option>
+            </select>
+          </label>
+          <label class="field narrow">Kecepatan<input data-meta="bpm" inputmode="numeric" placeholder="88"></label>
+        </div>
+        <label class="field">Tempo<input data-meta="tempo" placeholder="Khidmat"></label>
+        <label class="field">Syair<input data-meta="syair" placeholder="Nama penulis syair"></label>
+        <label class="field">Lagu<input data-meta="lagu" placeholder="Nama komponis"></label>
+        <label class="field">Terjemahan<input data-meta="terjemahan"></label>
+        <label class="field">Catatan di bawah lagu<input data-meta="catatan" placeholder="Hak cipta, sumber"></label>
+      </section>
+
+      <section class="side-sec">
+        <h2>Suara</h2>
+        <p class="quiet small">Sopran memegang lirik. Alto dan tenor ditambah dengan irama sopran, tinggal ditimpa.</p>
+        <div class="voice-row" id="voice-row">
+          <button class="chip" data-voice="S" aria-pressed="false">Sopran</button>
+          <button class="chip" data-voice="A" aria-pressed="false">Alto</button>
+          <button class="chip" data-voice="T" aria-pressed="false">Tenor</button>
+          <button class="chip" data-voice="B" aria-pressed="false">Bas</button>
+        </div>
+      </section>
+
+      <section class="side-sec">
+        <h2>Bait</h2>
+        <ul id="verse-list" class="verse-list"></ul>
+        <div class="row-gap">
+          <button id="btn-add-verse" class="btn small">Tambah bait di bawah not</button>
+          <button id="btn-add-text" class="btn small ghost">Tambah bait sebagai teks</button>
+        </div>
+      </section>
+
+      <section class="side-sec">
+        <h2>Halaman</h2>
+        <div class="field-row">
+          <label class="field">Kertas
+            <select id="sel-page">
+              <option value="A4">A4</option><option value="F4">F4 (folio)</option>
+              <option value="Letter">Letter</option><option value="A5">A5</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">Besar angka <output id="out-note">15</output>
+          <input id="rng-note" type="range" min="11" max="22" step="0.5" value="15">
+        </label>
+        <label class="field">Besar lirik <output id="out-lyric">11.5</output>
+          <input id="rng-lyric" type="range" min="8" max="18" step="0.5" value="11.5">
+        </label>
+        <label class="field">Contoh lagu
+          <select id="sel-example"><option value="">Pilih contoh</option></select>
+        </label>
+      </section>
+    </aside>
+
+    <main class="stage" id="stage" tabindex="0" aria-label="Partitur. Klik not untuk memilih, ketik angka untuk menulis.">
+      <div class="paper-wrap" id="paper-wrap">
+        <div id="paper" class="paper"></div>
+      </div>
+      <input id="inline-edit" class="inline-edit" hidden autocomplete="off" spellcheck="false">
+      <textarea id="inline-area" class="inline-edit area" hidden spellcheck="false"></textarea>
+    </main>
+
+    <aside class="code" id="code-pane" hidden aria-label="Kode Nada">
+      <div class="code-head">
+        <h2>Kode Nada</h2>
+        <button id="btn-format" class="btn small" title="Rapikan kode (Shift+Alt+F)">Rapikan</button>
+      </div>
+      <div class="code-body">
+        <pre id="gutter" class="gutter" aria-hidden="true"></pre>
+        <textarea id="code" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" aria-label="Kode lagu"></textarea>
+      </div>
+      <ol id="diag" class="diag"></ol>
+    </aside>
+  </div>
+
+  <footer class="tools" aria-label="Palet not">
+    <div class="tool-group" role="group" aria-label="Panjang not">
+      <button class="tool" data-dur="960" title="1 ketuk (J)"></button>
+      <button class="tool" data-dur="480" title="Setengah ketuk ([ untuk memendekkan)"></button>
+      <button class="tool" data-dur="240" title="Seperempat ketuk"></button>
+      <button class="tool" data-dur="320" title="Triol, sepertiga ketuk"></button>
+    </div>
+    <div class="tool-group" role="group" aria-label="Tanda">
+      <button class="tool" data-act="hold" title="Titik, tahan satu ketuk (.)"></button>
+      <button class="tool" data-act="rest" title="Tanda diam (0)"></button>
+      <button class="tool" data-act="up" title="Oktaf atas (panah atas)"></button>
+      <button class="tool" data-act="down" title="Oktaf bawah (panah bawah)"></button>
+      <button class="tool" data-act="sharp" title="Kres (#)"></button>
+      <button class="tool" data-act="flat" title="Mol (b)"></button>
+      <button class="tool" data-act="slur" title="Legato ke not berikutnya (S)"></button>
+      <button class="tool" data-act="breath" title="Tanda napas (;)"></button>
+      <button class="tool" data-act="fermata" title="Fermata (F)"></button>
+      <button class="tool" data-act="label" title="Label di atas not, mis. Refrein (L)"></button>
+    </div>
+    <div class="tool-group" role="group" aria-label="Birama">
+      <button class="tool" data-bar="single" title="Garis birama (|)"></button>
+      <button class="tool" data-bar="double" title="Birama ganda"></button>
+      <button class="tool" data-bar="final" title="Garis akhir"></button>
+      <button class="tool" data-bar="repeatStart" title="Awal ulangan"></button>
+      <button class="tool" data-bar="repeatEnd" title="Akhir ulangan"></button>
+      <button class="tool" data-act="break" title="Pindah baris di sini (Enter)"></button>
+      <button class="tool" data-act="delete" title="Hapus (Delete)"></button>
+    </div>
+    <button id="btn-keys" class="btn small ghost" title="Daftar pintasan (F1)">Pintasan</button>
+    <p id="status" class="status" aria-live="polite">Klik not untuk memilih. Ketik 1 sampai 7 untuk menulis.</p>
+  </footer>
+
+  <dialog id="keys" class="keys" aria-labelledby="keys-title">
+    <h2 id="keys-title">Pintasan papan ketik</h2>
+    <table>
+      <tr><td><kbd>1</kbd> sampai <kbd>7</kbd>, <kbd>0</kbd></td><td>Tulis atau ganti not, tanda diam</td></tr>
+      <tr><td><kbd>.</kbd></td><td>Titik, tahan satu ketuk</td></tr>
+      <tr><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd></td><td>Pindah ke not sebelum atau sesudahnya</td></tr>
+      <tr><td><kbd>&uarr;</kbd> <kbd>&darr;</kbd></td><td>Oktaf atas atau bawah</td></tr>
+      <tr><td><kbd>Alt</kbd> + <kbd>&uarr;</kbd> <kbd>&darr;</kbd></td><td>Pindah ke suara lain</td></tr>
+      <tr><td><kbd>J</kbd> <kbd>H</kbd> <kbd>K</kbd></td><td>Panjang 1, ½, ¼ ketuk</td></tr>
+      <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>Pendekkan atau panjangkan not</td></tr>
+      <tr><td><kbd>#</kbd> <kbd>B</kbd></td><td>Kres atau mol</td></tr>
+      <tr><td><kbd>S</kbd></td><td>Legato ke not berikutnya</td></tr>
+      <tr><td><kbd>;</kbd> <kbd>F</kbd> <kbd>L</kbd></td><td>Tanda napas, fermata, label</td></tr>
+      <tr><td><kbd>|</kbd> <kbd>Enter</kbd></td><td>Garis birama, pindah baris</td></tr>
+      <tr><td><kbd>Delete</kbd> <kbd>Backspace</kbd></td><td>Hapus</td></tr>
+      <tr><td>Klik dua kali not</td><td>Tulis lirik. Spasi untuk suku kata berikutnya, <kbd>-</kbd> untuk menyambung kata</td></tr>
+      <tr><td><kbd>Spasi</kbd></td><td>Putar atau hentikan</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd> <kbd>Y</kbd></td><td>Urungkan, ulangi</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd> <kbd>O</kbd> <kbd>N</kbd> <kbd>E</kbd></td><td>Simpan, buka, lagu baru, ekspor PDF</td></tr>
+      <tr><td><kbd>Ctrl</kbd> + roda tetikus, <kbd>Ctrl</kbd> + <kbd>0</kbd></td><td>Perbesar, pas lebar</td></tr>
+    </table>
+    <form method="dialog"><button class="btn">Tutup</button></form>
+  </dialog>
+
+  <script type="module" src="editor.js"></script>
+</body>
+</html>

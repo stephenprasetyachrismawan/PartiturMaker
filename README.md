@@ -1,113 +1,109 @@
 # PartiturMaker
 
-Aplikasi Windows untuk membuat partitur **not angka** bergaya buku nyanyian jemaat
-(Kidung Jemaat, Pelengkap Kidung Jemaat, Nyanyikanlah Kidung Baru, dan sejenisnya).
+Aplikasi Windows untuk menulis partitur **not angka** gaya Kidung Jemaat, PKJ dan NKB.
+Tulis langsung di halaman partitur: klik sebuah not, ketik angkanya, isi liriknya di
+bawahnya. Di balik layar setiap suntingan menjadi kode **Nada**, bahasa teks kecil yang
+bisa dibaca, dirapikan, dan disimpan sebagai berkas `.nada`.
 
-![Tampilan PartiturMaker](docs/screenshot.png)
+![PartiturMaker](docs/screenshot.png)
 
-## Fitur
+## Yang bisa dilakukan
 
-- Tulis lagu sebagai teks sederhana, pratinjau partitur langsung muncul di sebelahnya.
-- Header gaya buku nyanyian: nomor lagu, judul, ayat, `Do = …`, birama, tempo, syair & lagu.
-- 1 sampai 4 suara (Sopran, Alto, Tenor, Bas). Lirik diletakkan di antara alto dan tenor.
-- Beberapa bait lirik, dengan tanda hubung suku kata otomatis.
-- Simbol not angka lengkap: titik oktaf atas/bawah, garis bawah ½ dan ¼ ketuk, titik
-  perpanjangan, kres (/) dan mol (\), legato/ikatan, fermata, istirahat, birama ganda,
-  garis akhir, tanda ulang.
-- Pindah baris dan halaman otomatis, baris dirata kanan-kiri.
-- Ekspor **PDF**, **PNG** (300 dpi), **SVG**, dan cetak langsung. Kertas A4, F4/Folio, Letter, A5.
-- Putar lagu (semua suara atau satu suara saja) dengan sorotan not yang sedang berbunyi.
-- Klik not di pratinjau untuk melompat ke teksnya. Kesalahan ditunjukkan per baris.
-- Berkas `.ptm` adalah teks biasa (bisa dibuka di Notepad) dan terdaftar ke aplikasi saat instal.
+- **Menulis di partitur.** Klik not lalu ketik `1` sampai `7`. Panah atas/bawah untuk
+  oktaf, `[` dan `]` untuk panjang not, `#` dan `b` untuk kres dan mol, `s` untuk legato,
+  `;` untuk tanda napas, `|` untuk garis birama. Palet di bawah menyediakan semuanya untuk
+  tetikus.
+- **Lirik di tempatnya.** Klik dua kali sebuah not, ketik suku kata, tekan spasi untuk
+  pindah ke not berikutnya atau `-` untuk menyambung kata.
+- **Judul dan keterangan di tempatnya.** Klik judul, nomor, tempo atau nama pencipta di
+  halaman untuk mengubahnya, atau isi lewat panel kiri.
+- **Empat suara.** Tambah alto, tenor, bas; suara baru langsung mengikuti irama sopran.
+- **Gaya buku nyanyian.** Garis harga di atas angka, titik oktaf, legato melengkung di
+  bawah angka, kres bergaris miring, tanda napas, fermata, tanda ulang, `do = f   4 ketuk`,
+  pencipta di bawah lagu, bait tambahan sebagai teks.
+- **Tayangan per bait.** Satu set slide 16:9 untuk setiap bait, siap untuk proyektor.
+- **Kode Nada.** Panel kode menampilkan lagu sebagai teks, lengkap dengan nomor baris,
+  pesan kesalahan berbahasa Indonesia dan tombol **Rapikan**.
+- **Ekspor** PDF (font tertanam), PNG 300 dpi, SVG, atau cetak langsung. Kertas A4,
+  F4, Letter, A5.
+- **Putar** semua suara dengan sorotan not yang sedang berbunyi.
 
-## Unduh & pasang (Windows)
+Panduan lengkap bahasanya ada di [docs/bahasa-nada.md](docs/bahasa-nada.md).
 
-Installer dibangun otomatis oleh GitHub Actions di setiap push:
+## Unduh
 
-1. Buka tab **Actions** → workflow **Build Windows** → pilih proses terbaru.
-2. Unduh artefak **PartiturMaker-Windows**, lalu ekstrak.
-3. Jalankan `PartiturMaker-Setup-x.y.z.exe` (installer) atau
-   `PartiturMaker-Portable-x.y.z.exe` (tanpa instal).
+Installer dibangun otomatis oleh GitHub Actions:
 
-Untuk membuat rilis resmi, buat tag `v1.0.0` lalu push; berkas `.exe` akan dilampirkan ke halaman Releases.
+1. Buka tab **Actions**, pilih workflow **Build**, lalu proses terbaru.
+2. Unduh artefak **PartiturMaker-Windows** dan ekstrak.
+3. Jalankan `PartiturMaker_2.0.0_x64-setup.exe` (atau berkas `.msi`).
 
-> Aplikasi belum ditandatangani (code signing), jadi Windows SmartScreen bisa menampilkan
-> peringatan. Klik **More info → Run anyway**.
+Untuk rilis resmi, buat tag `v2.0.0` lalu push; installer akan dilampirkan ke Releases.
+Aplikasi belum ditandatangani, jadi Windows SmartScreen bisa menampilkan peringatan.
+Pilih **More info**, lalu **Run anyway**.
 
-## Cara menulis lagu
+## Susunan kode
 
-```
-nomor: 1
-judul: Muliakan Nama-Nya
-subjudul: Mazmur 100
-nada: Do = G
-birama: 4/4
-tempo: Khidmat
-syair: Nama Penulis
-lagu: Nama Komponis
-
-S: 1 1 3 5 | 6 5 3 . | 6, 1 2 3 | 2 1 2 . |
-A: 5, 6, 1 3 | 4 3 1 . | 4, 5, 7, 1 | 7, 1 7, . |
-
-1: Mu-li-a-kan na-ma-Nya, ha-i u-mat se-mu-a!
-2: Na-nyi-kan la-gu ba-ru de-ngan se-ge-nap ha-ti;
-```
-
-| Tulis | Arti |
+| Bagian | Isi |
 |---|---|
-| `1`–`7`, `0` | Not 1 ketuk, `0` = istirahat |
-| `.` | Perpanjang 1 ketuk (`5 . . .` = 4 ketuk) |
-| `1'` `5,` | Oktaf tinggi / rendah (boleh diulang: `1''`, `5,,`) |
-| `3/` `3//` | ½ ketuk / ¼ ketuk (garis bawah) |
-| `1 ./ 2/` | Not bertitik (1½ + ½ ketuk) |
-| `4#` `7b` | Kres / mol |
-| `(4/ 3/)` | Legato: satu suku kata untuk beberapa not |
-| `1^` | Fermata |
-| `\|` `\|\|` `\|.` `\|:` `:\|` | Garis birama, ganda, akhir, ulang |
-| `\` | Paksa pindah baris |
+| `crates/notangka` | Inti Rust: parser, formatter, operasi sunting, tata letak, SVG, PDF |
+| `crates/notangka-wasm` | Jembatan WebAssembly untuk antarmuka |
+| `ui/` | Antarmuka editor (HTML, CSS, JavaScript tanpa framework) |
+| `src-tauri/` | Aplikasi desktop Tauri: dialog buka dan simpan berkas |
 
-Lirik: `1:` adalah nomor bait. Pisahkan suku kata dengan `-`, pakai `_` untuk melewati
-satu not, dan `~` untuk menyambung dua kata pada satu not. Panduan lengkap ada di tombol
-**? Panduan** (F1) di dalam aplikasi.
+Alurnya: teks `.nada` → `parse` → model lagu → `layout` → SVG atau PDF. Editor memanggil
+`edit::apply` untuk setiap suntingan, lalu `format` menulis ulang kodenya.
 
-Tenor dan bas ditulis seperti kebiasaan buku nyanyian (satu oktaf lebih tinggi dari bunyinya);
-saat diputar, keduanya dibunyikan satu oktaf lebih rendah.
+## Mengembangkan
 
-## Pengembangan
+Butuh Rust (stable) dengan target `wasm32-unknown-unknown`, dan Node.js 20 atau lebih baru.
 
-Butuh Node.js 20+.
+```bash
+rustup target add wasm32-unknown-unknown
+```
 
 ```bash
 npm install
 ```
 
-```bash
-npm start
-```
+Jalankan tes inti:
 
 ```bash
-npm test
+cargo test -p notangka
 ```
+
+Coba antarmuka di browser (http://localhost:8765):
 
 ```bash
-npm run dist
+npm run web
 ```
 
-`npm run dist` menghasilkan installer di folder `dist/`. Installer NSIS paling mudah dibangun
-di Windows (di Linux butuh `wine`; versi portable bisa dibangun tanpa `wine`).
+Jalankan sebagai aplikasi desktop:
 
-Struktur:
+```bash
+npm run dev
+```
 
-- `main.js`, `preload.js` — proses utama Electron (menu, dialog berkas, ekspor PDF).
-- `src/parser.js` — membaca teks lagu.
-- `src/render.js` — tata letak & gambar SVG not angka.
-- `src/player.js` — pemutar WebAudio.
-- `src/app.js` — antarmuka.
+Bangun installer (di Windows):
 
-Folder `src/` juga bisa dibuka langsung di browser (`src/index.html`) untuk mencoba tanpa Electron.
+```bash
+npm run build
+```
 
-## Catatan hak cipta
+Rapikan berkas `.nada` dari terminal:
 
-Contoh lagu bawaan dibuat khusus untuk aplikasi ini. Syair dan lagu dalam KJ, PKJ, NKB, dll.
-umumnya dilindungi hak cipta (mis. milik YAMUGER); pastikan Anda punya izin sebelum
-memperbanyak atau membagikannya.
+```bash
+cargo run -p notangka --example nadafmt -- lagu.nada
+```
+
+## Font
+
+- Partitur: Liberation Serif (SIL Open Font License 1.1), ukurannya sama dengan
+  Times New Roman, sehingga tampilan layar, PNG dan PDF sama persis.
+- Antarmuka: Atkinson Hyperlegible Next (SIL Open Font License 1.1).
+
+## Hak cipta lagu
+
+Contoh lagu bawaan dibuat khusus untuk aplikasi ini. Syair dan lagu di KJ, PKJ, NKB dan
+buku sejenis umumnya dilindungi hak cipta (misalnya milik YAMUGER). Pastikan Anda punya
+izin sebelum memperbanyak atau membagikannya.

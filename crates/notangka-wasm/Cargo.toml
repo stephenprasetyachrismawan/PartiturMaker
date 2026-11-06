@@ -1,0 +1,12 @@
+[package]
+name = "notangka-wasm"
+description = "Jembatan WASM untuk editor PartiturMaker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+notangka = { path = "../notangka" }
