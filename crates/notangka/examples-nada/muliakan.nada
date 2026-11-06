@@ -1,0 +1,45 @@
+// Contoh empat suara. Melodi dan syair dibuat khusus untuk PartiturMaker.
+nomor = "PM 1"
+judul = "Muliakan Nama-Nya"
+ayat  = "Mazmur 100"
+nada  = G
+ketuk = 4
+tempo = "Khidmat"
+bpm   = 84
+syair = "Contoh PartiturMaker"
+lagu  = "Contoh PartiturMaker"
+
+suara S {
+  1 1 3 5 | 6 5 3 . ; | 6, 1 2 3 | 2 1 2 . ; |
+  5 5 6 1' | 7 6 5 . ; | 3 4 5 [(4 3)] | 2 2 1 . |.
+}
+
+suara A {
+  5, 6, 1 3 | 4 3 1 . | 4, 5, 7, 1 | 7, 1 7, . |
+  3 3 4 4 | 5 4 3 . | 1 1 3 1 | 7, 7, 1 . |.
+}
+
+suara T {
+  3 4 5 5 | 1' 1' 5 . | 2 3 5 5 | 4 3 2 . |
+  1 3 1 1 | 2 1 1 . | 5 6 5 6 | 5 4 3 . |.
+}
+
+suara B {
+  1 4, 1 1 | 4, 1 1 . | 2, 1 5, 1 | 5, 1 5, . |
+  1 3, 4, 4, | 5, 4, 1 . | 1 4, 3, 4, | 5, 5, 1 . |.
+}
+
+bait 1 {
+  Mu-li-a-kan na-ma-Nya, ha-i u-mat se-mu-a!
+  Ka-sih-Nya t'lah me-nya-ta, ter-pan-car di du-ni-a.
+}
+
+bait 2 {
+  Na-nyi-kan la-gu ba-ru de-ngan se-ge-nap ha-ti;
+  Tu-han Al-lah Pe-no-long ki-ni dan se-la-ma-nya.
+}
+
+teks 3 {
+  Bersama s'gala ciptaan, kita bersorak sorai;
+  nama-Nya terpujilah, kini dan selamanya.
+}
