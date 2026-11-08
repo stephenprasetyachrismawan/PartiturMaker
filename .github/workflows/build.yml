@@ -1,0 +1,83 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master, 'claude/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Isi untuk membuat rilis, mis. v2.0.0 (kosongkan untuk build saja)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+          components: rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: Cek format kode Rust
+        run: cargo fmt --all --check
+      - name: Tes inti (parser, formatter, tata letak)
+        run: cargo test -p notangka
+      - name: Bangun WebAssembly
+        run: node scripts/build-wasm.mjs
+
+  windows:
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Pasang Tauri CLI
+        run: npm ci
+      - name: Bangun installer Windows
+        run: npx tauri build
+      - name: Unggah installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: PartiturMaker-Windows
+          path: |
+            target/release/bundle/nsis/*.exe
+            target/release/bundle/msi/*.msi
+          if-no-files-found: error
+      - name: Tentukan tag rilis
+        id: rel
+        shell: bash
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then tag="${{ inputs.tag }}"
+          elif [[ "$GITHUB_REF" == refs/tags/v* ]]; then tag="$GITHUB_REF_NAME"
+          else tag="v$(node -p "require('./src-tauri/tauri.conf.json').version")"; fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+      # Rilis dibuat bila: push tag v*, dijalankan manual dengan input tag,
+      # atau push commit yang pesannya memuat [rilis] (tag = versi di tauri.conf.json).
+      - name: Rilis
+        if: >-
+          startsWith(github.ref, 'refs/tags/v') ||
+          (github.event_name == 'workflow_dispatch' && inputs.tag != '') ||
+          (github.event_name == 'push' && contains(github.event.head_commit.message, '[rilis]'))
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.rel.outputs.tag }}
+          target_commitish: ${{ github.sha }}
+          name: PartiturMaker ${{ steps.rel.outputs.tag }}
+          body_path: docs/catatan-rilis.md
+          files: |
+            target/release/bundle/nsis/*.exe
+            target/release/bundle/msi/*.msi
