@@ -38,7 +38,7 @@ Installer dibangun otomatis oleh GitHub Actions:
 2. Unduh artefak **PartiturMaker-Windows** dan ekstrak.
 3. Jalankan `PartiturMaker_2.0.0_x64-setup.exe` (atau berkas `.msi`).
 
-Untuk rilis resmi, buat tag `v2.0.0` lalu push; installer akan dilampirkan ke Releases.
+Untuk rilis resmi: push tag `v2.0.0`, jalankan workflow Build secara manual dengan input tag, atau push commit yang pesannya memuat `[rilis]`. Installer akan dilampirkan ke Releases.
 Aplikasi belum ditandatangani, jadi Windows SmartScreen bisa menampilkan peringatan.
 Pilih **More info**, lalu **Run anyway**.
 
